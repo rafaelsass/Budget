@@ -1,9 +1,13 @@
 import pandas as pd
-import decimal
+import decimal as dm
 import locale
+import os
+
+clear = lambda:os.system('cls')
 
 locale.setlocale(locale.LC_MONETARY,'')
-decimal.getcontext().prec = 3
+mycontext = dm.Context(prec=4)
+dm.setcontext(mycontext)
 
 class Cotacao:
 	def __init__(self):
@@ -46,7 +50,7 @@ class Cotacao:
 
 		elif self.produto[self.contador] == 'Stop Light':
 			espessuras = [0.08,0.10]
-			choice4 = int(input("\n0 - Stop Light 0,08\n1 - Stop Light 0,10\nEscolha a espessura: "))
+			choice4 = int(input("\n0 - Stop Light 0,08\n1 - Stop Light 0,10\n \nEscolha a espessura: "))
 			espessura = espessuras[choice4]
 			if espessura == espessuras[0]:
 				preços = (470.25, 585.88)
@@ -65,7 +69,7 @@ class Cotacao:
 			preços = (453.81,533.66,689.80)
 		elif self.produto[self.contador] == 'Fix Color':
 			espessuras = [0.08,0.10]
-			choice4 = int(input("\n0 - Fix Color 0,08\n1 - Fix Color 0,10\n\nEscolha a espessura: "))
+			choice4 = int(input("\n0 - Fix Color 0,08\n1 - Fix Color 0,10\n \nEscolha a espessura: "))
 			espessura = espessuras[choice4]
 			if espessura == espessuras[0]:
 				larguras = (1,1.06,1.22,1.52)
@@ -102,6 +106,11 @@ class Cotacao:
 		self.espessura.append(espessura)
 		quantidade1 = int(input("\nInsira a quantidade que deseja: "))
 		self.quantidade.append(quantidade1)
+		print(preço)
+		print(type(preço))
+		TWOPLACES = dm.Decimal(10)**-2
+		quantif = lambda x:dm.Decimal(x).quantize(TWOPLACES)
+		preço = quantif(preço)
 		self.preço.append(preço)
 	def final(self, total=[]):
 		self.total = list(map(lambda x,y:x*y,self.preço,self.quantidade))
@@ -110,6 +119,11 @@ class Cotacao:
 		print("\n",dicta)
 		pd.DataFrame(dicta).to_excel('cotadinho.xlsx')
 
+
+
+
+
+
 			
 
 def loop():
@@ -117,9 +131,13 @@ def loop():
 	cota1 = Cotacao()
 	while True:
 		cota1.choose()
+		clear()
 		cota1.list()
+		clear()
 		desc = int(input("\nInsira o desconto desejado: "))
+		clear()
 		cota1.pric(desc, contadora)
+		clear()
 		contadora += 1 
 		cota1.final()
 		a = input("repeat?: ")
@@ -131,5 +149,6 @@ def loop():
 
 
 loop()
+
 
 
