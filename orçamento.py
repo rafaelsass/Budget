@@ -6,7 +6,7 @@ import os
 clear = lambda:os.system('cls')
 
 locale.setlocale(locale.LC_MONETARY,'')
-mycontext = dm.Context(prec=4)
+mycontext = dm.Context(prec=9,rounding = dm.ROUND_DOWN)
 dm.setcontext(mycontext)
 
 class Cotacao:
@@ -39,7 +39,7 @@ class Cotacao:
 			preço = 244.57*self.desconto
 		elif self.produto[self.contador] == "Digimax":
 			espessuras = [0.08,0.10]
-			choice4 = int(input("\n0 - Digimax 0,08\n1 - Digmiax 0,10\nEscolha a espessura: "))
+			choice4 = int(input("\n0 - Digimax 0,08\n \n1 - Digmiax 0,10\n \nEscolha a espessura: "))
 			espessura = espessuras[choice4]
 			if espessura == espessuras[0]:
 				larguras = (1.00,1.06,1.22,1.40,1.52,2.00)
@@ -50,7 +50,7 @@ class Cotacao:
 
 		elif self.produto[self.contador] == 'Stop Light':
 			espessuras = [0.08,0.10]
-			choice4 = int(input("\n0 - Stop Light 0,08\n1 - Stop Light 0,10\n \nEscolha a espessura: "))
+			choice4 = int(input("\n0 - Stop Light 0,08\n \n1 - Stop Light 0,10\n \nEscolha a espessura: "))
 			espessura = espessuras[choice4]
 			if espessura == espessuras[0]:
 				preços = (470.25, 585.88)
@@ -69,7 +69,7 @@ class Cotacao:
 			preços = (453.81,533.66,689.80)
 		elif self.produto[self.contador] == 'Fix Color':
 			espessuras = [0.08,0.10]
-			choice4 = int(input("\n0 - Fix Color 0,08\n1 - Fix Color 0,10\n \nEscolha a espessura: "))
+			choice4 = int(input("\n0 - Fix Color 0,08\n \n1 - Fix Color 0,10\n \nEscolha a espessura: "))
 			espessura = espessuras[choice4]
 			if espessura == espessuras[0]:
 				larguras = (1,1.06,1.22,1.52)
@@ -89,11 +89,12 @@ class Cotacao:
 			espessura = 0.14
 			largura = 1.22
 			preço = 477.78*self.desconto
-		elif self.produto[self.contador] == 'Refletivo digital':
+		elif self.produto[self.contador] == 'Refletivo Digital':
 			espessura = 0.8
 			largura = 1.22
 			preço = 4407.35*self.desconto
-		
+
+		clear()
 		if len(larguras) > 0:	
 			for i in larguras:
 				print("\n",larguras.index(i),"-",i)
@@ -102,15 +103,12 @@ class Cotacao:
 			dic_preço = dict(zip(larguras,preços))
 			preço = (dic_preço[largura]*self.desconto)
 
+		clear()
 		self.largura.append(largura)
 		self.espessura.append(espessura)
 		quantidade1 = int(input("\nInsira a quantidade que deseja: "))
 		self.quantidade.append(quantidade1)
-		print(preço)
-		print(type(preço))
-		TWOPLACES = dm.Decimal(10)**-2
-		quantif = lambda x:dm.Decimal(x).quantize(TWOPLACES)
-		preço = quantif(preço)
+		preço = dm.Decimal.from_float(preço).quantize(dm.Decimal('0.01'))
 		self.preço.append(preço)
 	def final(self, total=[]):
 		self.total = list(map(lambda x,y:x*y,self.preço,self.quantidade))
@@ -130,6 +128,7 @@ def loop():
 	contadora = 0
 	cota1 = Cotacao()
 	while True:
+		clear()
 		cota1.choose()
 		clear()
 		cota1.list()
@@ -149,6 +148,9 @@ def loop():
 
 
 loop()
+
+
+
 
 
 
